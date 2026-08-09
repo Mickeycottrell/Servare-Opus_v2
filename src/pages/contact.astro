@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Contact">
+  <div class="page-header">
+    <div class="container">
+      <h1>Get in Touch</h1>
+      <p>Questions before you book a call? Send us a note.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <!-- This form posts to Formspree. Create a free form at https://formspree.io
+           and replace YOUR_FORM_ID below with the ID they give you. -->
+      <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" />
+        </div>
+        <div>
+          <label for="message">How can we help?</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn">Send Message</button>
+      </form>
+      <div class="note-box">
+        <strong>Setup note:</strong> This form is wired for
+        <a href="https://formspree.io" target="_blank" rel="noopener">Formspree</a> (free tier: 50 submissions/month,
+        delivered straight to your email — no backend needed). Create a free form and swap
+        <code>YOUR_FORM_ID</code> in <code>src/pages/contact.astro</code> for your real form ID.
+      </div>
+    </div>
+  </section>
+</Layout>
