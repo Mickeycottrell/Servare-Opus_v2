@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import StartConversation from '../components/StartConversation.astro';
 ---
 <Layout
   title="About"
@@ -8,7 +9,7 @@ import Layout from '../layouts/Layout.astro';
   <div class="page-header">
     <div class="container">
       <h1>About Servare Opus</h1>
-      <p>Executive support built on a simple idea: most CEOs share the same problems.</p>
+      <p>Executive support for the work that doesn't have a clear owner yet.</p>
     </div>
   </div>
 
@@ -28,11 +29,5 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <section class="alt">
-    <div class="container" style="text-align:center;">
-      <h2>Ready to get some of your week back?</h2>
-      <p style="color:var(--gray); max-width:520px; margin: 0 auto 28px;">Start with a no-pressure discovery call. We'll talk through where your time is going and whether we're a fit.</p>
-      <a href="/booking" class="btn">Book a Discovery Call</a>
-    </div>
-  </section>
+  <StartConversation />
 </Layout>
