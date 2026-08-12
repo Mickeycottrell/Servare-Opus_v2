@@ -11,9 +11,7 @@ import Layout from '../layouts/Layout.astro';
 
   <section>
     <div class="container">
-      <!-- This form posts to Formspree. Create a free form at https://formspree.io
-           and replace YOUR_FORM_ID below with the ID they give you. -->
-      <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form class="contact-form" action="https://formspree.io/f/xdenzzer" method="POST">
         <div>
           <label for="name">Name</label>
           <input type="text" id="name" name="name" required />
@@ -32,12 +30,6 @@ import Layout from '../layouts/Layout.astro';
         </div>
         <button type="submit" class="btn">Send Message</button>
       </form>
-      <div class="note-box">
-        <strong>Setup note:</strong> This form is wired for
-        <a href="https://formspree.io" target="_blank" rel="noopener">Formspree</a> (free tier: 50 submissions/month,
-        delivered straight to your email — no backend needed). Create a free form and swap
-        <code>YOUR_FORM_ID</code> in <code>src/pages/contact.astro</code> for your real form ID.
-      </div>
     </div>
   </section>
 </Layout>
