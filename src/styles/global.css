@@ -149,30 +149,29 @@ section.alt .card { background: var(--paper); }
   margin-bottom: 8px;
 }
 
-.manage-grid {
+.path-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
 }
 
-.manage-item {
+.path-card {
+  display: block;
   background: #fff;
   border: 1px solid var(--stone);
   border-radius: var(--radius);
-  padding: 20px 24px 20px 46px;
-  position: relative;
+  padding: 40px 32px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s ease;
 }
 
-.manage-item::before {
-  content: "";
-  position: absolute;
-  left: 20px;
-  top: 25px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--sage);
-}
+.path-card:hover { border-color: var(--sage); }
+
+.path-card h3 { font-size: 1.4rem; margin-bottom: 12px; }
+.path-card p { color: var(--stone); margin: 0 0 20px; }
+
+.path-cta { color: var(--sage); font-weight: 600; font-size: 0.95rem; }
 
 .card ul {
   text-align: left;
@@ -215,39 +214,9 @@ footer.site-footer a:hover { color: var(--sage-on-ink); }
 .prose { max-width: 720px; margin: 0 auto; }
 .prose h2 { margin-top: 1.5em; }
 .prose p { margin: 0 0 1.2em; }
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 28px;
-}
-
-.price-card {
-  background: #fff;
-  border: 1px solid var(--stone);
-  border-radius: var(--radius);
-  padding: 36px 28px;
-  text-align: center;
-}
-
-.price-card.featured {
-  border: 2px solid var(--sage);
-  position: relative;
-}
-
-.price-card .price {
-  font-family: Georgia, serif;
-  font-size: 2.2rem;
-  margin: 12px 0 20px;
-  color: var(--ink);
-}
-
-.price-card ul {
-  text-align: left;
-  color: var(--stone);
-  padding-left: 1.2em;
-  margin-bottom: 24px;
-}
+.prose ul { margin: 0 0 1.2em; padding-left: 1.3em; }
+.prose ul li { margin-bottom: 8px; }
+.prose ul li:last-child { margin-bottom: 0; }
 
 .blog-list { display: grid; gap: 28px; max-width: 780px; margin: 0 auto; }
 
