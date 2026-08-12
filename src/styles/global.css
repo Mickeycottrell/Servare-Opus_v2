@@ -149,6 +149,41 @@ section.alt .card { background: var(--paper); }
   margin-bottom: 8px;
 }
 
+.manage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.manage-item {
+  background: #fff;
+  border: 1px solid var(--stone);
+  border-radius: var(--radius);
+  padding: 20px 24px 20px 46px;
+  position: relative;
+}
+
+.manage-item::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: 25px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sage);
+}
+
+.card ul {
+  text-align: left;
+  color: var(--stone);
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.card ul li { margin-bottom: 8px; }
+.card ul li:last-child { margin-bottom: 0; }
+
 footer.site-footer {
   background: var(--ink);
   color: var(--stone);

@@ -6,7 +6,10 @@ const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
-<Layout title="Blog">
+<Layout
+  title="Blog"
+  description="Notes from Servare Opus on operations, credentialing, compliance, and running a leaner, more scalable business."
+>
   <div class="page-header">
     <div class="container">
       <h1>Blog</h1>

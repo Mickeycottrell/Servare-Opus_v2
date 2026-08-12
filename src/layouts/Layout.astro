@@ -1,15 +1,49 @@
 ---
 import '../styles/global.css';
-const { title, description = "Servare Opus — fractional executive assistant support for CEOs and founders." } = Astro.props;
+const {
+  title,
+  description = "Servare Opus — operations for healthcare practices and founder-led companies.",
+  type = "website",
+} = Astro.props;
+
+const pageTitle = `${title} | Servare Opus`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Servare Opus",
+  description: "Operations for healthcare practices and founder-led companies. We take responsibility for the systems, technology, compliance, and processes a business runs on.",
+  url: "https://servareopus.com",
+  areaServed: "US",
+  serviceType: [
+    "Healthcare Practice Operations",
+    "Business Operations",
+    "Credentialing and Compliance Coordination",
+    "Executive Research",
+  ],
+};
 ---
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title} | Servare Opus</title>
+  <title>{pageTitle}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalURL} />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={description} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
 </head>
 <body>
   <header class="site-header">
