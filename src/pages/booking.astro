@@ -3,26 +3,815 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout
   title="Schedule a Consultation"
-  description="Schedule a discovery call with Servare Opus to scope operations support for your healthcare practice or founder-led company."
+  description="Complete a short intake so Servare Opus can prepare for your consultation, then schedule a time that works."
 >
   <div class="page-header">
     <div class="container">
       <h1>Schedule a Consultation</h1>
-      <p>If there's alignment between what you need and what we do, this is where that gets figured out.</p>
+      <p>Complete a short intake so Servare Opus can prepare — then pick a time below.</p>
     </div>
   </div>
 
   <section>
-    <div class="container">
-      <div class="cal-embed-wrap">
-        <iframe
-          src="https://cal.com/micaela-cottrell-yluv5l/discovery-call?embed=true"
-          width="100%"
-          height="700"
-          frameborder="0"
-          title="Book a discovery call"
-        ></iframe>
+    <div class="container intake-wrap">
+      <div class="intro">
+        <p><strong>Welcome.</strong> Before the consultation, this short form helps Servare Opus walk into the conversation already understanding your business, what's at stake, and what "done well" looks like for you — so the conversation goes straight to the substance instead of the basics.</p>
+        <p>It takes about 5–7 minutes. Every question has a "not sure" option if you don't know the answer yet — that's useful information too.</p>
+        <div class="motto">"What is true. What is needed. Why it matters. How the business operates. What success looks like."</div>
       </div>
+
+      <div class="progress-shell">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-label" id="progressLabel">0% complete</div>
+      </div>
+
+      <form id="intakeForm">
+        <input type="hidden" name="_subject" value="New Consultation Intake Brief">
+
+        <!-- SECTION 1 -->
+        <div class="card intake-card">
+          <span class="step-badge">STEP 1 OF 6</span>
+          <h2>About You &amp; Your Business</h2>
+          <p class="section-note">Basic facts — this sets the frame for everything else.</p>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Your full name<span class="req">*</span></label>
+              <input type="text" name="fullName" required>
+            </div>
+            <div class="field">
+              <label>Business / practice name<span class="req">*</span></label>
+              <input type="text" name="businessName" required>
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label>Email<span class="req">*</span></label>
+              <input type="email" name="email" required>
+            </div>
+            <div class="field">
+              <label>Phone</label>
+              <input type="tel" name="phone">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Which best describes you?<span class="req">*</span></label>
+            <select name="clientType" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Solo healthcare practitioner (physician, dentist, therapist, chiropractor, etc.)</option>
+              <option>Healthcare group practice / multi-provider</option>
+              <option>Healthcare-adjacent business (med spa, wellness, diagnostics, home health, etc.)</option>
+              <option>Founder-led startup</option>
+              <option>Founder-led small business / owner-operator</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Current legal entity type</label>
+              <select name="entityType">
+                <option value="" disabled selected>Select one…</option>
+                <option>Sole Proprietorship</option>
+                <option>LLC</option>
+                <option>PLLC / PC (professional entity)</option>
+                <option>S-Corporation</option>
+                <option>C-Corporation</option>
+                <option>Nonprofit</option>
+                <option>Not yet formed</option>
+                <option>Not sure</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Time in operation</label>
+              <select name="yearsOperating">
+                <option value="" disabled selected>Select one…</option>
+                <option>Pre-launch / just starting</option>
+                <option>Less than 1 year</option>
+                <option>1–3 years</option>
+                <option>3–10 years</option>
+                <option>10+ years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Team size (including you)</label>
+            <select name="teamSize">
+              <option value="" disabled selected>Select one…</option>
+              <option>Just me</option>
+              <option>2–5</option>
+              <option>6–15</option>
+              <option>16–50</option>
+              <option>50+</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="card intake-card">
+          <span class="step-badge">STEP 2 OF 6</span>
+          <h2>How the Business Currently Operates</h2>
+          <p class="section-note">This becomes the "what is true" baseline Servare Opus works from — the honest current state, not the goal state.</p>
+
+          <div class="field">
+            <label>How are day-to-day operations currently managed?<span class="req">*</span></label>
+            <select name="opsMaturity" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Mostly manual / ad hoc</option>
+              <option>Spreadsheets and email</option>
+              <option>Some software, but disconnected systems</option>
+              <option>Mostly systematized with documented processes</option>
+              <option>Fully systematized and automated</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Do you have written policies or standard operating procedures (SOPs) for your core processes?</label>
+            <select name="sopStatus">
+              <option value="" disabled selected>Select one…</option>
+              <option>None</option>
+              <option>A few informal notes</option>
+              <option>Some documented</option>
+              <option>Fully documented and current</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Where is the biggest current strain?<span class="req">*</span></label>
+            <select name="strainArea" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>Scheduling / intake</option>
+              <option>Billing &amp; payments</option>
+              <option>Staffing &amp; delegation</option>
+              <option>Client / patient records &amp; documentation</option>
+              <option>Vendor / contractor management</option>
+              <option>Regulatory compliance</option>
+              <option>Technology / systems</option>
+              <option>Financial operations &amp; bookkeeping</option>
+              <option>Growth / scaling infrastructure</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>How would you describe your recordkeeping overall?</label>
+            <select name="recordkeeping">
+              <option value="" disabled selected>Select one…</option>
+              <option>Well organized</option>
+              <option>Adequate but inconsistent</option>
+              <option>Disorganized</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="card intake-card">
+          <span class="step-badge">STEP 3 OF 6</span>
+          <h2>What's Prompting This Consultation</h2>
+          <p class="section-note">This tells Servare Opus "why it matters" — the real motivation and urgency behind the request, which shapes how the conversation gets prioritized.</p>
+
+          <div class="field">
+            <label>What's driving you to reach out now?<span class="req">*</span></label>
+            <select name="trigger" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>A specific problem needs fixing</option>
+              <option>Preparing for growth / scaling</option>
+              <option>Preparing for a sale, merger, or succession</option>
+              <option>A compliance concern or deadline</option>
+              <option>General operational health check / second opinion</option>
+              <option>Just exploring options</option>
+            </select>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Urgency</label>
+              <select name="urgency">
+                <option value="" disabled selected>Select one…</option>
+                <option>Immediate / time-sensitive</option>
+                <option>Within the next month</option>
+                <option>Within the next quarter</option>
+                <option>No specific timeline</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Has this issue already caused a real business impact?</label>
+              <select name="impact">
+                <option value="" disabled selected>Select one…</option>
+                <option>Yes, significant impact already</option>
+                <option>Some minor impact</option>
+                <option>Not yet, but I'm concerned it will</option>
+                <option>No impact yet — purely proactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Share more, in your own words</label>
+            <textarea name="triggerDetail" placeholder="What happened, or what are you noticing, that brought you here?"></textarea>
+          </div>
+        </div>
+
+        <!-- SECTION 4 -->
+        <div class="card intake-card">
+          <span class="step-badge">STEP 4 OF 6</span>
+          <h2>Known &amp; Suspected Requirements</h2>
+          <p class="section-note">This flags "what is required" — regulatory or legal ground Servare Opus will confirm rather than assume.</p>
+
+          <div class="field">
+            <label>Are you aware of specific regulatory, licensing, or compliance requirements relevant to this issue?</label>
+            <select name="reqAwareness">
+              <option value="" disabled selected>Select one…</option>
+              <option>Yes, I know exactly what applies</option>
+              <option>I have a general sense</option>
+              <option>Not sure — that's part of why I'm reaching out</option>
+              <option>Not applicable, to my knowledge</option>
+            </select>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>HIPAA / patient privacy relevance</label>
+              <select name="reqHipaa">
+                <option value="" disabled selected>Select one…</option>
+                <option>Applies and we address it</option>
+                <option>Applies, but unsure how well we address it</option>
+                <option>Not sure if it applies</option>
+                <option>Not applicable</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>State professional licensing board rules</label>
+              <select name="reqLicensing">
+                <option value="" disabled selected>Select one…</option>
+                <option>Applies and we address it</option>
+                <option>Applies, but unsure how well we address it</option>
+                <option>Not sure if it applies</option>
+                <option>Not applicable</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label>Employment law (staff / contractors)</label>
+              <select name="reqEmployment">
+                <option value="" disabled selected>Select one…</option>
+                <option>Applies and we address it</option>
+                <option>Applies, but unsure how well we address it</option>
+                <option>Not sure if it applies</option>
+                <option>Not applicable</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Data privacy / cybersecurity</label>
+              <select name="reqDataPrivacy">
+                <option value="" disabled selected>Select one…</option>
+                <option>Applies and we address it</option>
+                <option>Applies, but unsure how well we address it</option>
+                <option>Not sure if it applies</option>
+                <option>Not applicable</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5 -->
+        <div class="card intake-card">
+          <span class="step-badge">STEP 5 OF 6</span>
+          <h2>What You're Hoping to Get From This Consultation</h2>
+          <p class="section-note">Your stated goal — the recommendation and implementation plan get built from an actual assessment, but this tells Servare Opus what success looks like to you.</p>
+
+          <div class="field">
+            <label>What would make this consultation a success for you?<span class="req">*</span></label>
+            <select name="desiredOutcome" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>A prioritized action plan</option>
+              <option>A specific policy or document drafted</option>
+              <option>A full audit of a process</option>
+              <option>An outside second opinion</option>
+              <option>Ongoing advisory support</option>
+              <option>Not sure yet — I need help figuring that out</option>
+            </select>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Preferred engagement type</label>
+              <select name="engagementType">
+                <option value="" disabled selected>Select one…</option>
+                <option>One-time project</option>
+                <option>Ongoing monthly advisory</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Budget range in mind <span class="hint">(optional)</span></label>
+              <select name="budget">
+                <option value="" disabled selected>Select one…</option>
+                <option>Under $2,500</option>
+                <option>$2,500 – $10,000</option>
+                <option>$10,000 – $25,000</option>
+                <option>$25,000+</option>
+                <option>Prefer not to say / need a quote first</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 6 -->
+        <div class="card intake-card">
+          <span class="step-badge">STEP 6 OF 6</span>
+          <h2>Logistics</h2>
+          <p class="section-note">Last details, then you'll get a preview of your consultation prep brief.</p>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Preferred meeting format</label>
+              <select name="meetingFormat">
+                <option value="" disabled selected>Select one…</option>
+                <option>Video call</option>
+                <option>Phone call</option>
+                <option>In-person</option>
+                <option>No preference</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>How did you hear about Servare Opus?</label>
+              <select name="referralSource">
+                <option value="" disabled selected>Select one…</option>
+                <option>Referral</option>
+                <option>Web search</option>
+                <option>Social media</option>
+                <option>Professional network / association</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Anything else Servare Opus should know before the consultation?</label>
+            <textarea name="additionalContext" placeholder="Optional — anything that would help Servare Opus prepare."></textarea>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn" id="generateBtn">Generate Consultation Prep Brief →</button>
+        </div>
+      </form>
+
+      <div id="summaryWrap">
+        <div class="brief" id="briefContent">
+          <!-- filled by JS -->
+        </div>
+
+        <div id="sendStatus" class="note-box" role="status" aria-live="polite" style="display:none;"></div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-secondary" onclick="window.print()">Print / Save as PDF</button>
+          <button type="button" class="btn-secondary" id="copyBtn">Copy Summary to Clipboard</button>
+        </div>
+
+        <div id="scheduleStep" class="schedule-step">
+          <p class="schedule-lead">Now, pick a time that works below.</p>
+          <div class="cal-embed-wrap">
+            <iframe
+              src="https://cal.com/micaela-cottrell-yluv5l/discovery-call?embed=true"
+              width="100%"
+              height="700"
+              frameborder="0"
+              title="Schedule a consultation"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <p class="form-footnote">Servare Opus &nbsp;·&nbsp; This brief is sent automatically when generated, and is also yours to print or copy for your own records &nbsp;·&nbsp; Confidential</p>
     </div>
   </section>
 </Layout>
+
+<style>
+  .intake-wrap { max-width: 760px; padding-bottom: 0; }
+
+  .intro {
+    background: #fff;
+    border: 1px solid var(--stone);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    font-size: 0.95rem;
+    color: var(--stone);
+  }
+
+  .intro strong { color: var(--ink); }
+
+  .intro .motto {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--stone);
+    font-style: italic;
+    color: var(--ink);
+    font-size: 0.9rem;
+  }
+
+  .progress-shell {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--paper);
+    padding: 14px 0 6px;
+  }
+
+  .progress-track {
+    height: 6px;
+    background: #e2ddd2;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--sage) 0%, var(--ink) 100%);
+    transition: width 0.25s ease;
+  }
+
+  .progress-label {
+    font-size: 0.75rem;
+    color: var(--stone);
+    margin-top: 5px;
+    text-align: right;
+    letter-spacing: 0.3px;
+  }
+
+  .intake-card { margin-top: 22px; }
+
+  .step-badge {
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .intake-card h2 { font-size: 1.2rem; margin: 0 0 4px; }
+
+  .section-note { margin: 0 0 18px; color: var(--stone); font-size: 0.9rem; }
+
+  .field { margin-bottom: 18px; }
+
+  .field label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .field label .req { color: #b3401f; margin-left: 2px; }
+  .field label .hint { font-weight: 400; color: var(--stone); font-size: 0.8rem; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+
+  @media (max-width: 640px) {
+    .grid2 { grid-template-columns: 1fr; }
+  }
+
+  input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    padding: 12px 14px;
+    border: 1px solid var(--stone);
+    border-radius: var(--radius);
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(91, 107, 82, 0.16);
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%232C3D2E' stroke-width='2' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+    cursor: pointer;
+  }
+
+  select:invalid { color: var(--stone); }
+
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 30px 0 10px; }
+
+  .btn-secondary {
+    display: inline-block;
+    background: #fff;
+    color: var(--ink);
+    padding: 12px 26px;
+    border-radius: var(--radius);
+    border: 1px solid var(--stone);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover { border-color: var(--sage); color: var(--sage); }
+
+  #summaryWrap { display: none; }
+  #summaryWrap.show { display: block; }
+
+  .brief {
+    background: #fff;
+    border: 1px solid var(--stone);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-top: 28px;
+  }
+
+  .brief-head {
+    text-align: center;
+    border-bottom: 2px solid var(--sage);
+    padding-bottom: 16px;
+    margin-bottom: 22px;
+  }
+
+  .brief-head h2 { font-size: 1.3rem; margin: 0 0 4px; }
+  .brief-head .meta { color: var(--stone); font-size: 0.85rem; }
+
+  .brief-block { margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px dashed var(--stone); }
+  .brief-block:last-of-type { border-bottom: none; }
+
+  .brief-block h3 {
+    font-size: 0.95rem;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin: 0 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brief-block h3 .num {
+    background: var(--ink);
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    letter-spacing: 0;
+  }
+
+  .brief-block p, .brief-block ul { margin: 0 0 4px 28px; font-size: 0.92rem; color: var(--ink); }
+  .brief-block ul { padding-left: 16px; }
+  .brief-block li { margin-bottom: 3px; }
+
+  .pill {
+    display: inline-block;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 0.75rem;
+    padding: 2px 9px;
+    border-radius: 12px;
+    margin: 2px 4px 2px 0;
+    border: 1px solid var(--stone);
+  }
+
+  .schedule-step {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.32s ease, transform 0.32s ease;
+    pointer-events: none;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--stone);
+  }
+
+  .schedule-step.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+  .schedule-lead { color: var(--stone); margin: 0 0 16px; }
+
+  .form-footnote {
+    text-align: center;
+    color: var(--stone);
+    font-size: 0.8rem;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--stone);
+  }
+
+  @media print {
+    .page-header, .intro, .progress-shell, .intake-card, .btn-row, .form-footnote { display: none !important; }
+    #summaryWrap { display: block !important; }
+    .brief { border: none; padding: 0; }
+  }
+</style>
+
+<script>
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdenzzer";
+
+  const form = document.getElementById("intakeForm") as HTMLFormElement;
+  const allFields = Array.from(form.querySelectorAll("input, select, textarea")) as (HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement)[];
+
+  function updateProgress() {
+    const filled = allFields.filter((f) => f.value && f.value.trim() !== "" && f.name !== "_subject").length;
+    const total = allFields.filter((f) => f.name !== "_subject").length;
+    const pct = Math.round((filled / total) * 100);
+    const fill = document.getElementById("progressFill");
+    const label = document.getElementById("progressLabel");
+    if (fill) fill.style.width = pct + "%";
+    if (label) label.textContent = pct + "% complete";
+  }
+  allFields.forEach((f) => {
+    f.addEventListener("input", updateProgress);
+    f.addEventListener("change", updateProgress);
+  });
+  updateProgress();
+
+  function orNA(v: string, fallback?: string) {
+    return v && v.length ? v : (fallback || "Not provided");
+  }
+
+  let lastPlainText = "";
+
+  async function generateSummary() {
+    if (!form.reportValidity()) return;
+
+    const d: Record<string, string> = {};
+    allFields.forEach((f) => { d[f.name] = f.value; });
+
+    const today = new Date();
+    const dateStr = today.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+    const reqItems: string[] = [];
+    const reqMap: Record<string, string> = {
+      reqHipaa: "HIPAA / Patient Privacy",
+      reqLicensing: "State Licensing Board Rules",
+      reqEmployment: "Employment Law",
+      reqDataPrivacy: "Data Privacy / Cybersecurity",
+    };
+    Object.keys(reqMap).forEach((k) => {
+      if (d[k] && d[k] !== "") {
+        reqItems.push(reqMap[k] + ": " + d[k]);
+      }
+    });
+
+    const html = `
+      <div class="brief-head">
+        <h2>Consultation Preparation Brief</h2>
+        <div class="meta">${orNA(d.businessName, "")} &nbsp;·&nbsp; Prepared for Servare Opus &nbsp;·&nbsp; ${dateStr}</div>
+      </div>
+
+      <div class="brief-block">
+        <h3><span class="num">1</span> How the Business Currently Operates</h3>
+        <p><strong>${orNA(d.fullName, "")}</strong> — ${orNA(d.clientType, "")}<br>
+        Entity: ${orNA(d.entityType, "Not specified")} &nbsp;·&nbsp; Time operating: ${orNA(d.yearsOperating, "Not specified")} &nbsp;·&nbsp; Team size: ${orNA(d.teamSize, "Not specified")}</p>
+        <p>Operational maturity: <strong>${orNA(d.opsMaturity, "")}</strong><br>
+        Documented policies/SOPs: ${orNA(d.sopStatus, "Not specified")}<br>
+        Recordkeeping: ${orNA(d.recordkeeping, "Not specified")}</p>
+      </div>
+
+      <div class="brief-block">
+        <h3><span class="num">2</span> What Is True (Presenting Issue)</h3>
+        <p>Primary strain area: <strong>${orNA(d.strainArea, "")}</strong></p>
+        ${d.triggerDetail ? `<p>In their words: "${d.triggerDetail}"</p>` : ""}
+      </div>
+
+      <div class="brief-block">
+        <h3><span class="num">3</span> Why It Matters (Motivation &amp; Urgency)</h3>
+        <p>Trigger: <strong>${orNA(d.trigger, "")}</strong><br>
+        Urgency: ${orNA(d.urgency, "Not specified")} &nbsp;·&nbsp; Business impact so far: ${orNA(d.impact, "Not specified")}</p>
+      </div>
+
+      <div class="brief-block">
+        <h3><span class="num">4</span> What May Be Required (To Verify — Client-Reported)</h3>
+        <p>Client's self-assessed regulatory awareness: <strong>${orNA(d.reqAwareness, "Not specified")}</strong></p>
+        ${reqItems.length ? `<ul>${reqItems.map((r) => `<li>${r}</li>`).join("")}</ul>` : "<p>No specific regulatory areas flagged by client.</p>"}
+        <p style="font-style:italic;color:var(--stone);font-size:0.8rem;margin-left:28px;">Client-reported only — confirm independently before treating as established.</p>
+      </div>
+
+      <div class="brief-block">
+        <h3><span class="num">5</span> What's Being Sought (Client's Definition of Success)</h3>
+        <p>Desired outcome: <strong>${orNA(d.desiredOutcome, "")}</strong><br>
+        Engagement type preference: ${orNA(d.engagementType, "Not specified")} &nbsp;·&nbsp; Budget range: ${orNA(d.budget, "Not specified")}</p>
+      </div>
+
+      <div class="brief-block">
+        <h3><span class="num">6</span> Implementation &amp; Logistics</h3>
+        <p>Meeting format: ${orNA(d.meetingFormat, "Not specified")} &nbsp;·&nbsp; Referral source: ${orNA(d.referralSource, "Not specified")}</p>
+        <p>Contact: ${orNA(d.email, "")} ${d.phone ? " · " + d.phone : ""}</p>
+        ${d.additionalContext ? `<p>Additional context: "${d.additionalContext}"</p>` : ""}
+      </div>
+    `;
+
+    const briefContent = document.getElementById("briefContent");
+    const summaryWrap = document.getElementById("summaryWrap");
+    if (briefContent) briefContent.innerHTML = html;
+    if (summaryWrap) summaryWrap.classList.add("show");
+
+    lastPlainText =
+`SERVARE OPUS — CONSULTATION PREPARATION BRIEF
+${orNA(d.businessName, "")} · ${dateStr}
+
+1) HOW THE BUSINESS CURRENTLY OPERATES
+Name: ${orNA(d.fullName, "")}
+Type: ${orNA(d.clientType, "")}
+Entity: ${orNA(d.entityType, "Not specified")} | Time operating: ${orNA(d.yearsOperating, "Not specified")} | Team size: ${orNA(d.teamSize, "Not specified")}
+Operational maturity: ${orNA(d.opsMaturity, "")}
+SOPs: ${orNA(d.sopStatus, "Not specified")}
+Recordkeeping: ${orNA(d.recordkeeping, "Not specified")}
+
+2) WHAT IS TRUE (PRESENTING ISSUE)
+Primary strain: ${orNA(d.strainArea, "")}
+${d.triggerDetail ? "In their words: " + d.triggerDetail : ""}
+
+3) WHY IT MATTERS
+Trigger: ${orNA(d.trigger, "")}
+Urgency: ${orNA(d.urgency, "Not specified")} | Impact so far: ${orNA(d.impact, "Not specified")}
+
+4) WHAT MAY BE REQUIRED (client-reported — verify independently)
+Awareness: ${orNA(d.reqAwareness, "Not specified")}
+${reqItems.length ? reqItems.map((r) => "- " + r).join("\n") : "No specific areas flagged."}
+
+5) WHAT'S BEING SOUGHT
+Desired outcome: ${orNA(d.desiredOutcome, "")}
+Engagement type: ${orNA(d.engagementType, "Not specified")} | Budget: ${orNA(d.budget, "Not specified")}
+
+6) IMPLEMENTATION & LOGISTICS
+Meeting format: ${orNA(d.meetingFormat, "Not specified")} | Referral source: ${orNA(d.referralSource, "Not specified")}
+Contact: ${orNA(d.email, "")} ${d.phone ? "| " + d.phone : ""}
+${d.additionalContext ? "Additional context: " + d.additionalContext : ""}
+`;
+
+    summaryWrap?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    sendBrief(plainTextClone());
+    revealSchedule();
+  }
+
+  function plainTextClone() {
+    return lastPlainText;
+  }
+
+  async function sendBrief(plainText: string) {
+    const statusEl = document.getElementById("sendStatus");
+    if (statusEl) statusEl.style.display = "none";
+    try {
+      const formData = new FormData(form);
+      formData.set("brief", plainText);
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: formData,
+      });
+      if (!res.ok) throw new Error("Formspree responded with " + res.status);
+    } catch (err) {
+      if (statusEl) {
+        statusEl.textContent = "Something went wrong sending this automatically — your brief is still available to copy or print above, or you can reach out via the Contact page.";
+        statusEl.style.display = "block";
+      }
+    }
+  }
+
+  function revealSchedule() {
+    const step = document.getElementById("scheduleStep");
+    if (!step) return;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        step.classList.add("show");
+      });
+    });
+  }
+
+  function copySummary() {
+    if (!lastPlainText) return;
+    navigator.clipboard.writeText(lastPlainText).then(() => {
+      alert("Summary copied to clipboard.");
+    }).catch(() => {
+      alert("Couldn't copy automatically — please select and copy the text manually.");
+    });
+  }
+
+  document.getElementById("generateBtn")?.addEventListener("click", generateSummary);
+  document.getElementById("copyBtn")?.addEventListener("click", copySummary);
+</script>
