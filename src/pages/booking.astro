@@ -15,8 +15,8 @@ import Layout from '../layouts/Layout.astro';
   <section>
     <div class="container intake-wrap">
       <div class="intro">
-        <p><strong>Welcome.</strong> Before the consultation, this short form helps Servare Opus walk into the conversation already understanding your business, what's at stake, and what "done well" looks like for you — so the conversation goes straight to the substance instead of the basics.</p>
-        <p>It takes about 5–7 minutes. Every question has a "not sure" option if you don't know the answer yet — that's useful information too.</p>
+        <p><strong>Welcome.</strong> Before the consultation, this short form helps Servare Opus walk into the conversation already understanding your business, what's at stake, and what "done well" looks like for you.</p>
+        <p>It takes about 5–7 minutes. Every question has a "not sure" option if you don't know the answer yet.</p>
         <div class="motto">"What is true. What is needed. Why it matters. How the business operates. What success looks like."</div>
       </div>
 
@@ -32,7 +32,7 @@ import Layout from '../layouts/Layout.astro';
         <div class="card intake-card">
           <span class="step-badge">STEP 1 OF 6</span>
           <h2>About You &amp; Your Business</h2>
-          <p class="section-note">Basic facts — this sets the frame for everything else.</p>
+          <p class="section-note">Basic details about you and the business.</p>
 
           <div class="grid2">
             <div class="field">
@@ -146,7 +146,7 @@ import Layout from '../layouts/Layout.astro';
               <option>Scheduling / intake</option>
               <option>Billing &amp; payments</option>
               <option>Staffing &amp; delegation</option>
-              <option>Client / patient records &amp; documentation</option>
+              <option id="strainRecordsOption">Client records &amp; documentation</option>
               <option>Vendor / contractor management</option>
               <option>Regulatory compliance</option>
               <option>Technology / systems</option>
@@ -235,6 +235,29 @@ import Layout from '../layouts/Layout.astro';
 
           <div class="grid2">
             <div class="field">
+              <label>Employment law (staff / contractors)</label>
+              <select name="reqEmployment">
+                <option value="" disabled selected>Select one…</option>
+                <option>Applies and we address it</option>
+                <option>Applies, but unsure how well we address it</option>
+                <option>Not sure if it applies</option>
+                <option>Not applicable</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Data privacy / cybersecurity</label>
+              <select name="reqDataPrivacy">
+                <option value="" disabled selected>Select one…</option>
+                <option>Applies and we address it</option>
+                <option>Applies, but unsure how well we address it</option>
+                <option>Not sure if it applies</option>
+                <option>Not applicable</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid2" data-track-fields="healthcare">
+            <div class="field">
               <label>HIPAA / patient privacy relevance</label>
               <select name="reqHipaa">
                 <option value="" disabled selected>Select one…</option>
@@ -255,27 +278,16 @@ import Layout from '../layouts/Layout.astro';
               </select>
             </div>
           </div>
-          <div class="grid2">
-            <div class="field">
-              <label>Employment law (staff / contractors)</label>
-              <select name="reqEmployment">
-                <option value="" disabled selected>Select one…</option>
-                <option>Applies and we address it</option>
-                <option>Applies, but unsure how well we address it</option>
-                <option>Not sure if it applies</option>
-                <option>Not applicable</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Data privacy / cybersecurity</label>
-              <select name="reqDataPrivacy">
-                <option value="" disabled selected>Select one…</option>
-                <option>Applies and we address it</option>
-                <option>Applies, but unsure how well we address it</option>
-                <option>Not sure if it applies</option>
-                <option>Not applicable</option>
-              </select>
-            </div>
+
+          <div class="field" data-track-fields="operational">
+            <label>Contracts &amp; vendor agreements</label>
+            <select name="reqContracts">
+              <option value="" disabled selected>Select one…</option>
+              <option>Applies and we address it</option>
+              <option>Applies, but unsure how well we address it</option>
+              <option>Not sure if it applies</option>
+              <option>Not applicable</option>
+            </select>
           </div>
         </div>
 
@@ -480,6 +492,8 @@ import Layout from '../layouts/Layout.astro';
 
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
 
+  [data-track-fields][hidden] { display: none; }
+
   @media (max-width: 640px) {
     .grid2 { grid-template-columns: 1fr; }
   }
@@ -633,15 +647,59 @@ import Layout from '../layouts/Layout.astro';
   const form = document.getElementById("intakeForm") as HTMLFormElement;
   const allFields = Array.from(form.querySelectorAll("input, select, textarea")) as (HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement)[];
 
+  const HEALTHCARE_CLIENT_TYPES = new Set([
+    "Solo healthcare practitioner (physician, dentist, therapist, chiropractor, etc.)",
+    "Healthcare group practice / multi-provider",
+    "Healthcare-adjacent business (med spa, wellness, diagnostics, home health, etc.)",
+  ]);
+
+  function trackForClientType(value: string) {
+    return HEALTHCARE_CLIENT_TYPES.has(value) ? "healthcare" : "operational";
+  }
+
+  const strainRecordsOption = document.getElementById("strainRecordsOption") as HTMLOptionElement | null;
+
+  function setBlockEnabled(block: Element, enabled: boolean) {
+    (block as HTMLElement).hidden = !enabled;
+    const fields = block.querySelectorAll("input, select, textarea") as NodeListOf<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
+    fields.forEach((f) => {
+      f.disabled = !enabled;
+      if (!enabled) f.value = "";
+    });
+  }
+
+  function applyTrack(track: string) {
+    form.dataset.track = track;
+
+    form.querySelectorAll('[data-track-fields="healthcare"]').forEach((block) => {
+      setBlockEnabled(block, track === "healthcare");
+    });
+    form.querySelectorAll('[data-track-fields="operational"]').forEach((block) => {
+      setBlockEnabled(block, track === "operational");
+    });
+
+    if (strainRecordsOption) {
+      strainRecordsOption.textContent = track === "healthcare" ? "Patient records & documentation" : "Client records & documentation";
+    }
+  }
+
   function updateProgress() {
-    const filled = allFields.filter((f) => f.value && f.value.trim() !== "" && f.name !== "_subject").length;
-    const total = allFields.filter((f) => f.name !== "_subject").length;
-    const pct = Math.round((filled / total) * 100);
+    const relevant = allFields.filter((f) => f.name !== "_subject" && !f.disabled);
+    const filled = relevant.filter((f) => f.value && f.value.trim() !== "").length;
+    const pct = Math.round((filled / relevant.length) * 100);
     const fill = document.getElementById("progressFill");
     const label = document.getElementById("progressLabel");
     if (fill) fill.style.width = pct + "%";
     if (label) label.textContent = pct + "% complete";
   }
+
+  const clientTypeSelect = form.elements.namedItem("clientType") as HTMLSelectElement;
+  applyTrack(trackForClientType(clientTypeSelect.value));
+  clientTypeSelect.addEventListener("change", () => {
+    applyTrack(trackForClientType(clientTypeSelect.value));
+    updateProgress();
+  });
+
   allFields.forEach((f) => {
     f.addEventListener("input", updateProgress);
     f.addEventListener("change", updateProgress);
@@ -669,6 +727,7 @@ import Layout from '../layouts/Layout.astro';
       reqLicensing: "State Licensing Board Rules",
       reqEmployment: "Employment Law",
       reqDataPrivacy: "Data Privacy / Cybersecurity",
+      reqContracts: "Contracts & Vendor Agreements",
     };
     Object.keys(reqMap).forEach((k) => {
       if (d[k] && d[k] !== "") {
