@@ -68,6 +68,29 @@ import Layout from '../layouts/Layout.astro';
             </select>
           </div>
 
+          <div class="field">
+            <label>Do you have a website?<span class="req">*</span></label>
+            <select name="hasWebsite" required>
+              <option value="" disabled selected>Select one…</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+
+          <div class="field" data-website-fields="yes">
+            <label>Website link<span class="req">*</span></label>
+            <input type="url" name="websiteUrl" placeholder="https://yourbusiness.com" required>
+          </div>
+
+          <div class="field" data-website-fields="no">
+            <label>Which is true?<span class="req">*</span></label>
+            <select name="noWebsiteReason" required>
+              <option value="" disabled selected>Select one…</option>
+              <option>I'd like to have one</option>
+              <option>I have one, but I'd rather not share the link</option>
+            </select>
+          </div>
+
           <div class="grid2">
             <div class="field">
               <label>Current legal entity type</label>
@@ -492,13 +515,13 @@ import Layout from '../layouts/Layout.astro';
 
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
 
-  [data-track-fields][hidden] { display: none; }
+  [hidden] { display: none; }
 
   @media (max-width: 640px) {
     .grid2 { grid-template-columns: 1fr; }
   }
 
-  input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], select, textarea {
     width: 100%;
     font-family: inherit;
     font-size: 1rem;
@@ -700,6 +723,22 @@ import Layout from '../layouts/Layout.astro';
     updateProgress();
   });
 
+  function applyWebsiteVisibility(value: string) {
+    form.querySelectorAll('[data-website-fields="yes"]').forEach((block) => {
+      setBlockEnabled(block, value === "yes");
+    });
+    form.querySelectorAll('[data-website-fields="no"]').forEach((block) => {
+      setBlockEnabled(block, value === "no");
+    });
+  }
+
+  const hasWebsiteSelect = form.elements.namedItem("hasWebsite") as HTMLSelectElement;
+  applyWebsiteVisibility(hasWebsiteSelect.value);
+  hasWebsiteSelect.addEventListener("change", () => {
+    applyWebsiteVisibility(hasWebsiteSelect.value);
+    updateProgress();
+  });
+
   allFields.forEach((f) => {
     f.addEventListener("input", updateProgress);
     f.addEventListener("change", updateProgress);
@@ -712,11 +751,28 @@ import Layout from '../layouts/Layout.astro';
 
   let lastPlainText = "";
 
+  function websiteBriefLine(d: Record<string, string>) {
+    if (d.hasWebsite === "yes" && d.websiteUrl) {
+      return "Website: " + d.websiteUrl;
+    }
+    if (d.hasWebsite === "no") {
+      if (d.noWebsiteReason === "I have one, but I'd rather not share the link") {
+        return "Website: No — has one, prefers not to share the link";
+      }
+      if (d.noWebsiteReason) {
+        return "Website: No — " + d.noWebsiteReason;
+      }
+    }
+    return "";
+  }
+
   async function generateSummary() {
     if (!form.reportValidity()) return;
 
     const d: Record<string, string> = {};
     allFields.forEach((f) => { d[f.name] = f.value; });
+
+    const websiteLine = websiteBriefLine(d);
 
     const today = new Date();
     const dateStr = today.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
@@ -744,7 +800,8 @@ import Layout from '../layouts/Layout.astro';
       <div class="brief-block">
         <h3><span class="num">1</span> How the Business Currently Operates</h3>
         <p><strong>${orNA(d.fullName, "")}</strong> — ${orNA(d.clientType, "")}<br>
-        Entity: ${orNA(d.entityType, "Not specified")} &nbsp;·&nbsp; Time operating: ${orNA(d.yearsOperating, "Not specified")} &nbsp;·&nbsp; Team size: ${orNA(d.teamSize, "Not specified")}</p>
+        Entity: ${orNA(d.entityType, "Not specified")} &nbsp;·&nbsp; Time operating: ${orNA(d.yearsOperating, "Not specified")} &nbsp;·&nbsp; Team size: ${orNA(d.teamSize, "Not specified")}<br>
+        ${websiteLine || "Website: Not specified"}</p>
         <p>Operational maturity: <strong>${orNA(d.opsMaturity, "")}</strong><br>
         Documented policies/SOPs: ${orNA(d.sopStatus, "Not specified")}<br>
         Recordkeeping: ${orNA(d.recordkeeping, "Not specified")}</p>
@@ -796,6 +853,7 @@ ${orNA(d.businessName, "")} · ${dateStr}
 Name: ${orNA(d.fullName, "")}
 Type: ${orNA(d.clientType, "")}
 Entity: ${orNA(d.entityType, "Not specified")} | Time operating: ${orNA(d.yearsOperating, "Not specified")} | Team size: ${orNA(d.teamSize, "Not specified")}
+${websiteLine || "Website: Not specified"}
 Operational maturity: ${orNA(d.opsMaturity, "")}
 SOPs: ${orNA(d.sopStatus, "Not specified")}
 Recordkeeping: ${orNA(d.recordkeeping, "Not specified")}
